@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventApp</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/css/styles.min.css">
+
+    <script type="text/javascript">
+
+    window.onload=function(){
+    $("#myInput").keyup(function() {
+      var filter = $(this).val(),
+        count = 0;
+
+      $('#ct div').each(function() {
+
+        if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+          $(this).hide();
+
+        } else {
+          $(this).show();
+          count++;
+        }
+      });
+    });
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{{url_for('home')}}">EventApp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div style="justify-content:space-between" class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <div></div>
+          <div style="">
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" id="myInput" placeholder="Search" aria-label="Search">
+              </form>
+          </div>
+
+          <div style="">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="{{url_for('home')}}">Events</a>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link" href="{{url_for('myEvents')}}">My Events</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link active" href="{{url_for('logout')}}">Logout</a>
+                  </li>
+              </ul>
+          </div>
+
+      </div>
+    </nav>
+
+    <div class="photo-gallery">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center"></h2>
+            </div>
+            <div class="row" id="ct" >
+
+                {% for event in events %}
+                <div class="col-sm-12 col-md-6 col-lg-3 item">
+                    <div  class="card img-fluid" style="width: 18rem;">
+                      <img src="{{event['eventImage']}}" class="card-img-top" alt="static/img/desk.jpg">
+                      <div class="card-body">
+                          <h5 class="card-title">{{event['eventName']}}</h5>
+                          <p class="card-text">{{event['evetDescription']}}</p>
+                      </div>
+                        <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{event['eventCategory']}}</li>
+                      </ul>
+                        <div class="card-body">
+                         <button style="border:none; background-color:white; color:blue" data-toggle="modal" data-target="#exampleModal">Edit</button>
+
+                        <a style="position: absolute; right:40px; color:red" href="{{url_for('deleteEvent', eventId = event['eventId'])}}" class="card-link">Delete</a>
+                      </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Event Name</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Event Description</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                          </div>
+                            <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Event Category</label>
+                            <input type="text" class="form-control" id="recipient-category">
+                          </div>
+                            <!--
+                            <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Event Date</label>
+                            <input type="text" class="form-control" id="recipient-date">
+                          </div>
+                            <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Event Time</label>
+                            <input type="text" class="form-control" id="recipient-time">
+                          </div>
+                            -->
+                            <label class="form-label" for="customFile">Event Image</label>
+                            <input type="file" class="form-control" id="customFile" />
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Update Event</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

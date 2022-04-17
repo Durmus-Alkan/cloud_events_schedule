@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MovieProject.iml" filepath="$PROJECT_DIR$/.idea/MovieProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dynamoDB.iml" filepath="$PROJECT_DIR$/.idea/dynamoDB.iml" />
     </modules>
   </component>
 </project>
